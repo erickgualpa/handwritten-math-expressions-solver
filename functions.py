@@ -1,5 +1,4 @@
 import cv2
-import numpy as np
 
 def loadImage(img_name):
     img = cv2.imread(img_name, cv2.IMREAD_COLOR)
