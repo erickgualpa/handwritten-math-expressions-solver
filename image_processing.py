@@ -29,28 +29,37 @@ def opening(img, kernel_size):
     return opened
 
 def max_contrast(img, scale):
-    """
     img = Image.fromarray(img)
     en = ImageEnhance.Contrast(img)
-    img = en.enhance(2.0)
+    img = en.enhance(scale)
     contrast = np.array(img)
-    """
-    contrast = img * scale
 
     return contrast
 
 def spot_numbers(img):
     # Smooth the image with contrast increasing
     contrast = max_contrast(img, 2)
-    showImage(contrast)
+    #showImage(contrast)
 
     # Spot edges
     canny = cv2.Canny(contrast, 30, 200)
 
     # Clean the image
-    clos = closing(canny, kernel_size=(5,5))
+    #clos = closing(canny, kernel_size=(5,5))
 
-    return clos
+    return canny
+
+def find_and_draw_contours(original, img):
+    #showImage(img)
+    contours, hierarchy = cv2.findContours(img.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    rects = [cv2.boundingRect(ctr) for ctr in contours]
+
+    # TODO: Remove rects intersection
+
+    for rect in rects:
+        cv2.rectangle(original, (rect[0], rect[1]), (rect[0] + rect[2], rect[1] + rect[3]), (0, 255, 0), 3)
+
+    return original
 ##############################################################################
 
 def process_image(img):
@@ -63,8 +72,7 @@ def process_image(img):
     # STEP 3 - Spot the digits
     digits = spot_numbers(bilateral)
 
-    # STEP 4 - Find the countourns
-    cnts = cv2.findContours(digits.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    
+    # STEP 4 - Find and draw the contours
+    contours = find_and_draw_contours(img, digits)
 
-    return digits
+    return contours

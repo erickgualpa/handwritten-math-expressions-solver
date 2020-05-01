@@ -22,8 +22,20 @@ joblib.dump(digits_pred, './classifiers/digits_pred.pkl', compress=3)
 ###################################################################
 
 ## IMAGE PROCESSING ###############################################
-img1 = working_ims[4]
+"""
+img1 = working_ims[0]
 showImage(img1)
 processed_img = process_image(img1)
 showImage(processed_img)
+"""
+
+vid = cv2.VideoCapture(0)
+while(True):
+    ret, frame = vid.read()
+    processed_image = process_image(frame)
+    cv2.imshow('frame', processed_image)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+vid.release()
+cv2.destroyAllWindows()
 ###################################################################
