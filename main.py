@@ -1,6 +1,7 @@
-from functions import *
-from digits_predictor import *
+from utils import *
+from digits_predictor_training import *
 from image_processing import *
+from text_detection import *
 
 import os
 import joblib
@@ -11,7 +12,7 @@ path_img = './img/'
 working_ims = []
 for root, dirs, files in os.walk(path_img):
     for filename in files:
-        working_ims.append(resizeImage(loadImage(path_img + filename), scale=20))
+        working_ims.append(loadImage(path_img + filename))
 ###################################################################
 
 ## GET AND SAVE THE CLASSIFIER ####################################
@@ -22,13 +23,14 @@ joblib.dump(digits_pred, './classifiers/digits_pred.pkl', compress=3)
 ###################################################################
 
 ## IMAGE PROCESSING ###############################################
-"""
-img1 = working_ims[0]
-showImage(img1)
-processed_img = process_image(img1)
-showImage(processed_img)
-"""
 
+img1 = working_ims[3]
+showImage(resizeImage(img1, 30))
+# processed_img = process_image(img1)
+# showImage(processed_img)
+
+
+"""
 vid = cv2.VideoCapture(0)
 while(True):
     ret, frame = vid.read()
@@ -38,4 +40,10 @@ while(True):
         break
 vid.release()
 cv2.destroyAllWindows()
+"""
+###################################################################
+
+## TEXT DETECTION #################################################
+detection = detect_text_on_image(img1, 0.5)
+showImage(resizeImage(detection, 30))
 ###################################################################

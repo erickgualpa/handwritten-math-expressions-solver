@@ -1,7 +1,7 @@
 from PIL import Image, ImageEnhance
 import cv2
 import numpy as np
-from functions import *
+from utils import *
 
 ## FUNCTIONS #################################################################
 def dilate(img, kernel_size):
