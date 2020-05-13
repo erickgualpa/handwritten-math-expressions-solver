@@ -17,5 +17,8 @@ def resizeImage(img, scale):
     height = int(img.shape[0] * scale_percent / 100)
     dim = (width, height)
 
-    resized = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
+    resized = cv2.resize(img, dim, interpolation=cv2.INTER_AREA)
     return resized
+
+def resizeImageByDim(img, width, height):
+    return cv2.resize(img, (width, height), interpolation=cv2.INTER_AREA)
