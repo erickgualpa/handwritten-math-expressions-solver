@@ -23,9 +23,8 @@ joblib.dump(digits_pred, './classifiers/digits_pred.pkl', compress=3)
 ###################################################################
 
 ## IMAGE PROCESSING ###############################################
-
-img1 = working_ims[3]
-showImage(resizeImage(img1, 30))
+working_im = working_ims[1]
+showImage(resizeImage(working_im, 30))
 # processed_img = process_image(img1)
 # showImage(processed_img)
 
@@ -44,6 +43,10 @@ cv2.destroyAllWindows()
 ###################################################################
 
 ## TEXT DETECTION #################################################
-detection = detect_text_on_image(img1, 0.5)
+boxes, detection = detect_text_on_image(working_im, 0.2)    # (image, min_confidence)
 showImage(resizeImage(detection, 30))
+detected_texts = get_boxes_as_images(boxes, working_im)    # Extract de bounding rectangles of detected text as images
 ###################################################################
+
+for im in detected_texts:
+    showImage(resizeImage(im, 30))
