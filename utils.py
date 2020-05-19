@@ -22,3 +22,8 @@ def resizeImage(img, scale):
 
 def resizeImageByDim(img, width, height):
     return cv2.resize(img, (width, height), interpolation=cv2.INTER_AREA)
+
+def getOffsetForAllDirections(scale_x, scale_y, width, height):
+    offset_x = int(width * scale_x) // 2
+    offset_y = int(height * scale_y) // 2
+    return offset_x, offset_y

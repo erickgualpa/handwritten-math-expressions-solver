@@ -1,4 +1,5 @@
 from imutils.object_detection import non_max_suppression
+from utils import *
 import numpy as np
 import cv2
 
@@ -21,6 +22,7 @@ def detect_text_on_image(img, min_confidence):
     # STEP 1: Resize image for making its dimensions 32 multiples
     height, width = img.shape[:2]
     img = cv2.resize(img, (NEW_WIDTH, NEW_HEIGHT))
+    #showImage(img)
 
     rW = width / float(NEW_WIDTH)   # Width change ratio
     rH = height / float(NEW_HEIGHT) # Height change ratio
@@ -98,12 +100,40 @@ def detect_text_on_image(img, min_confidence):
     boxes = non_max_suppression(np.array(bounding_rects_list), probs=confidences_list)
 
     # Re-scale the boxes and draw them over the original image
+    offset_scale_x = 0.5  # increasing scale of x-dim of the bounding rectangle size
+    offset_scale_y = 0.6  # increasing scale of y-dim of the bounding rectangle size
+
+    original_height = np.array(original).shape[0]
+    original_width = np.array(original).shape[1]
+
+    final_boxes = []    # list containing the boxes for the original size
     for (start_x, start_y, end_x, end_y) in boxes:
         start_x = int(start_x * rW)
         start_y = int(start_y * rH)
         end_x = int(end_x * rW)
         end_y = int(end_y * rH)
 
+        box_offset_x, box_offset_y = getOffsetForAllDirections(offset_scale_x, offset_scale_y, (end_x - start_x), (end_y - start_y))
+
+        start_x = (start_x - box_offset_x) if (start_x - box_offset_x) > 0 else 0
+        start_y = (start_y - box_offset_y) if (start_y - box_offset_y) > 0 else 0
+        end_x = (end_x + box_offset_x) if (end_x + box_offset_x) < original_width else original_width
+        end_y = (end_y + box_offset_y) if (end_y + box_offset_y) < original_height else original_height
+
+        final_boxes.append((start_x, start_y, end_x, end_y))
         cv2.rectangle(original, (start_x, start_y), (end_x, end_y), (0, 255, 0), 2)
 
-    return original
+    return final_boxes, original
+
+def get_boxes_as_images(boxes, img): # 'boxes' item:(start_x, start_y, end_x, end_y)
+    detected_texts = []
+
+    for box in boxes:   # box:(start_x, start_y, end_x, end_y)
+        start_x = box[0]
+        start_y = box[1]
+        end_x = box[2]
+        end_y = box[3]
+
+        detected_texts.append(img[start_y:end_y, start_x:end_x, :])
+
+    return np.array(detected_texts)
