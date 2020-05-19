@@ -6,7 +6,7 @@ from os import listdir
 from utils import *
 import numpy as np
 
-DATASET_PATH = "../extracted_images_Kaggle/"
+DATASET_PATH = "../Kaggle_full_dataset/"
 WIDTH_DS_ITEM = 8   # Dataset sample width
 HEIGHT_DS_ITEM = 8  # Dataset sample height
 
