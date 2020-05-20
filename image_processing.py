@@ -6,27 +6,27 @@ from utils import *
 ## FUNCTIONS #################################################################
 def dilate(img, kernel_size):
     kernel = np.ones(kernel_size, np.uint8)
-    dilation = cv2.dilate(img, kernel, iterations=3)
+    im_dilation = cv2.dilate(img, kernel, iterations=3)
 
-    return dilation
+    return im_dilation
 
 def erode(img, kernel_size):
     kernel = np.ones(kernel_size, np.uint8)
-    erosion = cv2.erode(img, kernel, iterations=1)
+    im_erosion = cv2.erode(img, kernel, iterations=1)
 
-    return erosion
+    return im_erosion
 
 def closing(img, kernel_size):
     kernel = np.ones(kernel_size, np.uint8)
-    closed = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel)
+    im_closed = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel)
 
-    return closed
+    return im_closed
 
 def opening(img, kernel_size):
     kernel = np.ones(kernel_size, np.uint8)
-    opened = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)
+    im_opened = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)
 
-    return opened
+    return im_opened
 
 def max_contrast(img, scale):
     img = Image.fromarray(img)
@@ -38,41 +38,58 @@ def max_contrast(img, scale):
 
 def spot_numbers(img):
     # Smooth the image with contrast increasing
-    contrast = max_contrast(img, 2)
+    im_contrast = max_contrast(img, 2)
     #showImage(contrast)
 
     # Spot edges
-    canny = cv2.Canny(contrast, 30, 200)
+    im_canny = cv2.Canny(im_contrast, 30, 200)
 
-    # Clean the image
-    #clos = closing(canny, kernel_size=(5,5))
+    # Close the found edges
+    im_closed = closing(im_canny, (9,9))
 
-    return canny
+    return im_closed
 
 def find_and_draw_contours(original, img):
-    #showImage(img)
+    height, width = original.shape[:2]
+
     contours, hierarchy = cv2.findContours(img.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     rects = [cv2.boundingRect(ctr) for ctr in contours]
 
-    # TODO: Remove rects intersection
-
+    detections = []
     for rect in rects:
-        cv2.rectangle(original, (rect[0], rect[1]), (rect[0] + rect[2], rect[1] + rect[3]), (0, 255, 0), 3)
+        # TODO: Almacenar contornos para extraer las areas correspondientes de la imagen
+        start_x = rect[0]
+        start_y = rect[1]
+        w = rect[2]
+        h = rect[3]
+        end_x = start_x + w
+        end_y = start_y + h
 
-    return original
+        rect_offset_x, rect_offset_y = getOffsetForAllDirections(scale_x=0.3, scale_y=0.3, width=w, height=h)
+
+        start_x = (start_x - rect_offset_x) if (start_x - rect_offset_x) > 0 else 0
+        start_y = (start_y - rect_offset_y) if (start_y - rect_offset_y) > 0 else 0
+        end_x = (end_x + rect_offset_x) if (end_x + rect_offset_x) < width else width
+        end_y = (end_y + rect_offset_y) if (end_y + rect_offset_y) < height else height
+
+        cv2.rectangle(original, (start_x, start_y), (end_x, end_y), (0, 255, 0), 3)
+        detections.append((start_x, start_y, end_x, end_y))
+
+    return np.array(detections), original
 ##############################################################################
 
 def process_image(img):
     # STEP 1 - Convert input image to grayscale
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    im_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     # STEP 2 - Apply Bilateral filter for noise removing
-    bilateral = cv2.bilateralFilter(gray, 11, 17, 17)
+    im_bilateral = cv2.bilateralFilter(im_gray, 11, 17, 17)
 
     # STEP 3 - Spot the digits
-    digits = spot_numbers(bilateral)
+    im_digits = spot_numbers(im_bilateral)
+    # showImage(im_digits)
 
     # STEP 4 - Find and draw the contours
-    contours = find_and_draw_contours(img, digits)
+    detections, im_contours = find_and_draw_contours(img, im_digits)
 
-    return contours
+    return detections, im_contours

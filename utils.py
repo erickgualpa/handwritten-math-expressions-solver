@@ -1,4 +1,5 @@
 import cv2
+import numpy as np
 
 def loadImage(img_name):
     img = cv2.imread(img_name, cv2.IMREAD_COLOR)
@@ -27,3 +28,20 @@ def getOffsetForAllDirections(scale_x, scale_y, width, height):
     offset_x = int(width * scale_x) // 2
     offset_y = int(height * scale_y) // 2
     return offset_x, offset_y
+
+def get_boxes_as_images(boxes, img): # 'boxes' item:(start_x, start_y, end_x, end_y)
+    detected_texts = []
+
+    # TODO: Sort 'boxes'
+    boxes = np.array(boxes)
+    boxes = boxes[boxes[:, 0].argsort()]
+
+    for box in boxes:   # box:(start_x, start_y, end_x, end_y)
+        start_x = box[0]
+        start_y = box[1]
+        end_x = box[2]
+        end_y = box[3]
+
+        detected_texts.append(img[start_y:end_y, start_x:end_x, :])
+
+    return np.array(detected_texts)
