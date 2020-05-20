@@ -6,7 +6,7 @@ from os import listdir
 from utils import *
 import numpy as np
 
-DATASET_PATH = "../Kaggle_full_dataset/"
+DATASET_PATH = "../Kaggle_reducted_dataset/"
 WIDTH_DS_ITEM = 8   # Dataset sample width
 HEIGHT_DS_ITEM = 8  # Dataset sample height
 
@@ -31,7 +31,7 @@ class DigitsSymbolsDataset:
     def __len__(self):
         return self.__samples.__len__()
 
-def get_digits_predictor():
+def get_digits_symbols_predictor():
     # Prepare Kaggle Digits and Symbols object
     dataset = DigitsSymbolsDataset()
 
@@ -39,12 +39,11 @@ def get_digits_predictor():
     _, axes = plt.subplots(2, 4)
 
     # Load Kaggle Digits and Symbols
-    labels = listdir(DATASET_PATH)
-    for label in labels[:3]:   # De momento probamos con los 5 primeros labels
-        data = os.listdir(DATASET_PATH + label)
+    labels = np.array(listdir(DATASET_PATH))
+    for label in labels[8:12]:
+        data = np.array(os.listdir(DATASET_PATH + label))
         for sample in data:
             # print("- ", label, " --> ", sample)
-            # TODO: read image -> resize image to 8x8 -> save in dataset
             dataset.add_target(label)
             filename = DATASET_PATH + label + "/" + sample
             im_sample = resizeImageByDim(loadImage(filename), WIDTH_DS_ITEM, HEIGHT_DS_ITEM)
@@ -70,7 +69,7 @@ def get_digits_predictor():
     classifier = svm.SVC(gamma=0.001)
 
     # Split data into train and tests subsets
-    x_train, x_test, y_train, y_test = train_test_split(data, np.array(dataset.get_targets()), test_size=0.45, shuffle=False)
+    x_train, x_test, y_train, y_test = train_test_split(data, np.array(dataset.get_targets()), test_size=0.45, shuffle=True)
 
     # Learn the digits on the first half of the digits
     classifier.fit(x_train, y_train)
@@ -98,5 +97,8 @@ def get_digits_predictor():
     plt.show()
     return classifier
 
+
+"""
 if __name__ == '__main__':
-    get_digits_predictor()
+    get_digits_symbols_predictor()
+"""
