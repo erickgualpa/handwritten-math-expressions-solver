@@ -125,15 +125,3 @@ def detect_text_on_image(img, min_confidence):
 
     return final_boxes, original
 
-def get_boxes_as_images(boxes, img): # 'boxes' item:(start_x, start_y, end_x, end_y)
-    detected_texts = []
-
-    for box in boxes:   # box:(start_x, start_y, end_x, end_y)
-        start_x = box[0]
-        start_y = box[1]
-        end_x = box[2]
-        end_y = box[3]
-
-        detected_texts.append(img[start_y:end_y, start_x:end_x, :])
-
-    return np.array(detected_texts)

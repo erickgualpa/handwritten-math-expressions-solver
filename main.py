@@ -43,10 +43,14 @@ cv2.destroyAllWindows()
 ###################################################################
 
 ## TEXT DETECTION #################################################
-boxes, detection = detect_text_on_image(working_im, 0.2)    # (image, min_confidence)
-showImage(resizeImage(detection, 30))
+boxes, im_detection = detect_text_on_image(working_im, 0.2)    # (image, min_confidence)
+# showImage(resizeImage(im_detection, 30))
 detected_texts = get_boxes_as_images(boxes, working_im)    # Extract de bounding rectangles of detected text as images
 ###################################################################
 
-for im in detected_texts:
-    showImage(resizeImage(im, 30))
+for im_text in detected_texts:
+    detections, _ = process_image(im_text.copy())
+    detected_digits_symbols = get_boxes_as_images(detections, im_text)
+    # showImage(resizeImage(im_contours, 30))
+    for im_digit_symbol in detected_digits_symbols:
+        showImage(resizeImage(im_digit_symbol, 30))
