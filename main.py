@@ -1,8 +1,6 @@
-from utils import *
-from digits_predictor_training import *
-from digits_symbols_predictor_training import *
 from image_processing import *
 from text_detection import *
+from solving_expression_module import solve_expression
 
 import os
 import joblib
@@ -17,7 +15,7 @@ for root, dirs, files in os.walk(path_img):
         working_ims.append(loadImage(path_img + filename))
 ###################################################################
 
-## GET AND SAVE THE CLASSIFIER ####################################
+## BUILD AND SAVE THE SYMBOLS/DIGITS CLASSIFIER ###################
 """
 start_time = time.time()
 digits_symbols_pred = get_digits_symbols_predictor()
@@ -60,7 +58,7 @@ for im_text in detected_texts:
     detections, _ = process_image(im_text.copy())
     detected_digits_symbols = get_boxes_as_images(detections, im_text)
     # showImage(resizeImage(im_contours, 30))
-    expression = []
+    math_exp = []    # math_exp -> Symbol list
     for im_digit_symbol in detected_digits_symbols:
         # Convert 'im_digit_symbol' to grayscale
         im_gray = cv2.cvtColor(im_digit_symbol, cv2.COLOR_BGR2GRAY)
@@ -76,10 +74,18 @@ for im_text in detected_texts:
         # Flatten image
         im_gray = np.array(im_gray).flatten()
 
-        res = clf.predict([im_gray])
-        expression.append(res)
+        # Predict expression symbol
+        symbol = clf.predict([im_gray])
+
+        # Append symbol on math expression
+        math_exp.append(symbol[0])
+    expression_list.append(np.array(math_exp))
+expression_list = np.array(expression_list)
 ###################################################################
 
-for item in expression:
-    print(item)
+## EXPRESSION SOLVING ############################################
+for exp in expression_list:
+    str_exp, result = solve_expression(exp)
+    print(str_exp, '=', result)
+##################################################################
 

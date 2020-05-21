@@ -5,7 +5,6 @@ from skimage.filters import threshold_sauvola
 import cv2
 import numpy as np
 
-
 ## FUNCTIONS #################################################################
 def dilate(img, kernel_size):
     kernel = np.ones(kernel_size, np.uint8)
@@ -52,19 +51,6 @@ def spot_numbers(img):
 
     return im_closed
 
-def pre_svm_image_processing(img):
-    # Smooth the image with contrast increasing
-    im_contrast = max_contrast(img, 2)
-    # showImage(im_contrast)
-
-    # Sauvola thresholding
-    window_size = 25
-    tresh_sauvola = threshold_sauvola(im_contrast, window_size=window_size)
-    im_contrast[im_contrast > tresh_sauvola] = 255
-    im_contrast[im_contrast <= tresh_sauvola] = 0
-
-    return im_contrast
-
 def find_and_draw_contours(original, img):
     height, width = original.shape[:2]
 
@@ -109,3 +95,16 @@ def process_image(img):
     detections, im_contours = find_and_draw_contours(img, im_digits)
 
     return detections, im_contours
+
+def pre_svm_image_processing(img):
+    # Smooth the image with contrast increasing
+    im_contrast = max_contrast(img, 2)
+    # showImage(im_contrast)
+
+    # Sauvola thresholding
+    window_size = 25
+    tresh_sauvola = threshold_sauvola(im_contrast, window_size=window_size)
+    im_contrast[im_contrast > tresh_sauvola] = 255
+    im_contrast[im_contrast <= tresh_sauvola] = 0
+
+    return im_contrast
