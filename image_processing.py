@@ -1,7 +1,10 @@
 from PIL import Image, ImageEnhance
+from utils import *
+from skimage.filters import threshold_sauvola
+
 import cv2
 import numpy as np
-from utils import *
+
 
 ## FUNCTIONS #################################################################
 def dilate(img, kernel_size):
@@ -39,15 +42,28 @@ def max_contrast(img, scale):
 def spot_numbers(img):
     # Smooth the image with contrast increasing
     im_contrast = max_contrast(img, 2)
-    #showImage(contrast)
+    #showImage(im_contrast)
 
     # Spot edges
     im_canny = cv2.Canny(im_contrast, 30, 200)
 
     # Close the found edges
-    im_closed = closing(im_canny, (9,9))
+    im_closed = closing(im_canny, (9, 9))
 
     return im_closed
+
+def pre_svm_image_processing(img):
+    # Smooth the image with contrast increasing
+    im_contrast = max_contrast(img, 2)
+    # showImage(im_contrast)
+
+    # Sauvola thresholding
+    window_size = 25
+    tresh_sauvola = threshold_sauvola(im_contrast, window_size=window_size)
+    im_contrast[im_contrast > tresh_sauvola] = 255
+    im_contrast[im_contrast <= tresh_sauvola] = 0
+
+    return im_contrast
 
 def find_and_draw_contours(original, img):
     height, width = original.shape[:2]
@@ -57,7 +73,7 @@ def find_and_draw_contours(original, img):
 
     detections = []
     for rect in rects:
-        # TODO: Almacenar contornos para extraer las areas correspondientes de la imagen
+        # Calculate contour areas for extracting it from the image later
         start_x = rect[0]
         start_y = rect[1]
         w = rect[2]

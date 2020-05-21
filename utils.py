@@ -32,7 +32,7 @@ def getOffsetForAllDirections(scale_x, scale_y, width, height):
 def get_boxes_as_images(boxes, img): # 'boxes' item:(start_x, start_y, end_x, end_y)
     detected_texts = []
 
-    # TODO: Sort 'boxes'
+    # Sort 'boxes' by x-axis
     boxes = np.array(boxes)
     boxes = boxes[boxes[:, 0].argsort()]
 
