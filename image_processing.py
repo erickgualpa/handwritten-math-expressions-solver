@@ -67,7 +67,7 @@ def find_and_draw_contours(original, img):
         end_x = start_x + w
         end_y = start_y + h
 
-        rect_offset_x, rect_offset_y = getOffsetForAllDirections(scale_x=0.3, scale_y=0.3, width=w, height=h)
+        rect_offset_x, rect_offset_y = get_offset_for_all_directions(scale_x=0.3, scale_y=0.3, width=w, height=h)
 
         start_x = (start_x - rect_offset_x) if (start_x - rect_offset_x) > 0 else 0
         start_y = (start_y - rect_offset_y) if (start_y - rect_offset_y) > 0 else 0

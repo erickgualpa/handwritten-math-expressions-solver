@@ -113,7 +113,7 @@ def detect_text_on_image(img, min_confidence):
         end_x = int(end_x * rW)
         end_y = int(end_y * rH)
 
-        box_offset_x, box_offset_y = getOffsetForAllDirections(offset_scale_x, offset_scale_y, (end_x - start_x), (end_y - start_y))
+        box_offset_x, box_offset_y = get_offset_for_all_directions(offset_scale_x, offset_scale_y, (end_x - start_x), (end_y - start_y))
 
         start_x = (start_x - box_offset_x) if (start_x - box_offset_x) > 0 else 0
         start_y = (start_y - box_offset_y) if (start_y - box_offset_y) > 0 else 0
