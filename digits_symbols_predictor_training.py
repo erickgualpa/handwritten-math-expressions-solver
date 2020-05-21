@@ -46,7 +46,7 @@ def get_digits_symbols_predictor():
             # print("- ", label, " --> ", sample)
             dataset.add_target(label)
             filename = DATASET_PATH + label + "/" + sample
-            im_sample = resizeImageByDim(loadImage(filename), WIDTH_DS_ITEM, HEIGHT_DS_ITEM)
+            im_sample = resize_image_by_dim(loadImage(filename), WIDTH_DS_ITEM, HEIGHT_DS_ITEM)
             im_sample = cv2.cvtColor(im_sample, cv2.COLOR_BGR2GRAY)
             dataset.add_sample(im_sample)
 
