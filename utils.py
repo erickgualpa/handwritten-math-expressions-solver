@@ -13,18 +13,17 @@ def showImage(img):
     cv2.destroyAllWindows()
 
 def resizeImage(img, scale):
-    scale_percent = scale
-    width = int(img.shape[1] * scale_percent / 100)
-    height = int(img.shape[0] * scale_percent / 100)
+    width = int(img.shape[1] * scale)
+    height = int(img.shape[0] * scale)
     dim = (width, height)
 
     resized = cv2.resize(img, dim, interpolation=cv2.INTER_AREA)
     return resized
 
-def resizeImageByDim(img, width, height):
+def resize_image_by_dim(img, width, height):
     return cv2.resize(img, (width, height), interpolation=cv2.INTER_AREA)
 
-def getOffsetForAllDirections(scale_x, scale_y, width, height):
+def get_offset_for_all_directions(scale_x, scale_y, width, height):
     offset_x = int(width * scale_x) // 2
     offset_y = int(height * scale_y) // 2
     return offset_x, offset_y
@@ -45,3 +44,14 @@ def get_boxes_as_images(boxes, img): # 'boxes' item:(start_x, start_y, end_x, en
         detected_texts.append(img[start_y:end_y, start_x:end_x, :])
 
     return np.array(detected_texts)
+
+def write_message_on_img(img, message):
+    RED = (0, 255, 0)
+    font = cv2.FONT_HERSHEY_SIMPLEX
+    font_size = 0.8
+    font_color = RED
+    font_thickness = 1
+    x,y = 10,40
+    img_text = cv2.putText(img, message, (x,y), font, font_size, font_color, font_thickness, cv2.LINE_AA)
+
+    return img_text
