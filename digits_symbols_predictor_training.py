@@ -7,8 +7,8 @@ from utils import *
 import numpy as np
 
 DATASET_PATH = "../Kaggle_reducted_dataset/"
-WIDTH_DS_ITEM = 8   # Dataset sample width
-HEIGHT_DS_ITEM = 8  # Dataset sample height
+WIDTH_DS_ITEM = 28   # Dataset sample width
+HEIGHT_DS_ITEM = 28  # Dataset sample height
 
 class DigitsSymbolsDataset:
     def __init__(self):
@@ -40,7 +40,7 @@ def get_digits_symbols_predictor():
 
     # Load Kaggle Digits and Symbols
     labels = np.array(listdir(DATASET_PATH))
-    for label in labels[8:12]:
+    for label in labels:
         data = np.array(os.listdir(DATASET_PATH + label))
         for sample in data:
             # print("- ", label, " --> ", sample)
@@ -98,7 +98,3 @@ def get_digits_symbols_predictor():
     return classifier
 
 
-"""
-if __name__ == '__main__':
-    get_digits_symbols_predictor()
-"""

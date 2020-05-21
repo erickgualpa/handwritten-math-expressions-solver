@@ -1,3 +1,4 @@
+from digits_symbols_predictor_training import get_digits_symbols_predictor
 from image_processing import *
 from text_detection import *
 from solving_expression_module import solve_expression
@@ -17,14 +18,14 @@ for root, dirs, files in os.walk(path_img):
 
 ## BUILD AND SAVE THE SYMBOLS/DIGITS CLASSIFIER ###################
 # TODO: Volver a entrenar la SVM
-"""
+
 start_time = time.time()
 digits_symbols_pred = get_digits_symbols_predictor()
 joblib.dump(digits_symbols_pred, './classifiers/digits_symbols_pred.pkl', compress=3)
 print("--- Elapsed time: %s seconds ---" % (time.time() - start_time))
-"""
-###################################################################
 
+###################################################################
+"""
 ## LOAD CLASSIFIER ################################################
 clf = joblib.load('./classifiers/digits_symbols_pred.pkl')
 ###################################################################
@@ -33,7 +34,7 @@ clf = joblib.load('./classifiers/digits_symbols_pred.pkl')
 working_im = working_ims[1]
 showImage(resizeImage(working_im, 0.3))
 
-"""
+
 vid = cv2.VideoCapture(0)
 while(True):
     ret, frame = vid.read()
@@ -43,7 +44,7 @@ while(True):
         break
 vid.release()
 cv2.destroyAllWindows()
-"""
+
 ###################################################################
 
 ## TEXT DETECTION #################################################
@@ -70,7 +71,7 @@ for im_text in detected_texts:
         #showImage(resizeImage(im_gray, 0.3))
 
         # Reshape image to (8,8)
-        im_gray = cv2.resize(im_gray, (8, 8), interpolation=cv2.INTER_AREA)
+        im_gray = cv2.resize(im_gray, (28, 28), interpolation=cv2.INTER_AREA)
 
         # Flatten image
         im_gray = np.array(im_gray).flatten()
@@ -89,10 +90,11 @@ im_result = resizeImage(working_im, 0.3)
 for exp in expression_list:
     str_exp, result = solve_expression(exp)
     print(str_exp, '=', result)
-
+    # TODO: Considerar el caso de que haya mas de una expresion que mostrar en la image
     # Show expression result on image
     im_result = write_message_on_img(im_result, str(str_exp) + '=' + str(result))
 
 showImage(im_result)
 ##################################################################
+"""
 
