@@ -1,12 +1,10 @@
-from digits_symbols_classifier_cnn import get_digits_symbols_classifier
 from image_processing import *
-from text_detection import *
+from text_detection import detect_text_on_image, get_boxes_as_images
 from solving_expression_module import solve_expression
 from keras.models import load_model
 
 import os
 import json
-import time
 
 DIGITS_SYMBOLS_MAPPING = "digits-symbols-mapping.json"
 # Load digits-symbols mapping from categorical to numerical
@@ -22,22 +20,12 @@ for root, dirs, files in os.walk(path_img):
         working_ims.append(loadImage(path_img + filename))
 ###################################################################
 
-"""
-## BUILD AND SAVE THE SYMBOLS/DIGITS CLASSIFIER ###################
-start_time = time.time()
-digits_symbols_classifier = get_digits_symbols_classifier()
-digits_symbols_classifier.save('./classifiers/digits_symbols_cnn_classif.h5')
-print('Saving the model as digits_symbols_cnn_classif.h5')
-print("--- Elapsed time: %s seconds ---" % (time.time() - start_time))
-###################################################################
-"""
-
 ## LOAD CLASSIFIER ################################################
 clf = load_model('./classifiers/digits_symbols_cnn_classif.h5')
 ###################################################################
 
 ## SET WORKING IMAGE ##############################################
-working_im = working_ims[3]
+working_im = working_ims[1]
 showImage(resizeImage(working_im, 0.3))
 
 """
@@ -92,12 +80,11 @@ expression_list = np.array(expression_list)
 ###################################################################
 
 ## EXPRESSION SOLVING ############################################
-# TODO: CAMBIAR TODO
+# TODO: Colocar el resultado debajo del texto detectado
 im_result = resizeImage(working_im, 0.3)
 for exp in expression_list:
     str_exp, result = solve_expression(exp)
     print(str_exp, '=', result)
-    # TODO: Considerar el caso de que haya mas de una expresion que mostrar en la image
     # Show expression result on image
     im_result = write_message_on_img(im_result, str(str_exp) + '=' + str(result))
 
