@@ -1,4 +1,5 @@
 import keras
+import time
 
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten
@@ -8,7 +9,7 @@ from DigitsSymbolsDataset import DigitsSymbolsDataset
 
 K.clear_session()
 
-def get_digits_symbols_classifier():
+def build_digits_symbols_classifier(batch_size, epochs):
     ## LOAD DATA ######################################################
     ds = DigitsSymbolsDataset()
     (x_train, y_train), (x_test, y_test) = ds.load_data()
@@ -26,9 +27,6 @@ def get_digits_symbols_classifier():
     ###################################################################
 
     # MODEL BUILDING ##################################################
-    batch_size = 128
-    epochs = 2
-
     # Model
     model = Sequential()
     model.add(Conv2D(32, kernel_size=(3, 3),activation='relu',input_shape=input_shape))
@@ -55,3 +53,12 @@ def get_digits_symbols_classifier():
     ###################################################################
 
     return model
+
+if __name__ == '__main__':
+    ## BUILD AND SAVE THE SYMBOLS/DIGITS CLASSIFIER ###################
+    start_time = time.time()
+    digits_symbols_classifier = build_digits_symbols_classifier(batch_size=64, epochs=5)
+    digits_symbols_classifier.save('./classifiers/digits_symbols_cnn_classif.h5')
+    print('Saving the model as digits_symbols_cnn_classif.h5')
+    print("--- Elapsed time: %s seconds ---" % (time.time() - start_time))
+    ###################################################################

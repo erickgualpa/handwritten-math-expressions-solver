@@ -1,6 +1,7 @@
 import numpy as np
 import json
 import wolframalpha
+from utils import clean_factor_from_expression
 
 WOLFRAM_CREDS_FILE = "wolfram-creds.json"
 WOLFRAM_OPERATIONS_SYMBOLS = ('*', '/', '[', ']', '(', ')')
@@ -10,7 +11,8 @@ INTERNAL_OPERATIONS_SYMBOLS = ('+', '-')
 def convert_expression_to_string(math_exp):
     str_math_exp = ''
     for symbol in math_exp:
-        # TODO: Añadir un mapeo de símbolos
+        if symbol not in WOLFRAM_OPERATIONS_SYMBOLS and symbol not in INTERNAL_OPERATIONS_SYMBOLS:
+            symbol = clean_factor_from_expression(symbol)
         str_math_exp += symbol
     return str_math_exp
 
@@ -44,14 +46,20 @@ def solve_expression(math_exp):
     math_exp = np.array(math_exp)
 
     # Check if the expression contains complex symbols
-    intersect = np.intersect1d(math_exp, WOLFRAM_OPERATIONS_SYMBOLS)
+    intersect_complex = np.intersect1d(math_exp, WOLFRAM_OPERATIONS_SYMBOLS)
+
+    # Check if the expression contains basic operation symbols
+    intersect_basic = np.intersect1d(math_exp, INTERNAL_OPERATIONS_SYMBOLS)
 
     str_math_exp = convert_expression_to_string(math_exp)
-    if len(intersect) > 0:
+    if len(intersect_complex) > 0:
         result = solve_expression_on_wolfram_api(str_math_exp)
-    else:
+    elif len(intersect_basic) > 0:
         result = solve_expression_internally(str_math_exp)
+    else:
+        result = str_math_exp
 
     return str_math_exp, result
+
 
 
