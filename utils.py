@@ -55,3 +55,9 @@ def write_message_on_img(img, message):
     img_text = cv2.putText(img, message, (x,y), font, font_size, font_color, font_thickness, cv2.LINE_AA)
 
     return img_text
+
+def clean_factor_from_expression(factor):
+    if len(factor) > 1 and factor[0] == '0':
+        return factor[1:]
+    else:
+        return factor
