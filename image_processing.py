@@ -96,7 +96,7 @@ def process_image(img):
 
     return detections, im_contours
 
-def pre_svm_image_processing(img):
+def pre_classification_image_processing(img):
     # Smooth the image with contrast increasing
     im_contrast = max_contrast(img, 2)
     # showImage(im_contrast)
@@ -107,4 +107,33 @@ def pre_svm_image_processing(img):
     im_contrast[im_contrast > tresh_sauvola] = 255
     im_contrast[im_contrast <= tresh_sauvola] = 0
 
+    im_contrast = (255-im_contrast)
+
     return im_contrast
+
+def pre_cnn_image_processing(img):
+    # Adding border to the image
+    border_scale = 0.25
+    top = int(border_scale * img.shape[0])  # shape[0] = rows
+    bottom = top
+    left = int(border_scale * img.shape[1])  # shape[1] = cols
+    right = left
+    value = (255, 255, 255)
+    img = cv2.copyMakeBorder(img, top, bottom, left, right, cv2.BORDER_CONSTANT, None, value)
+
+    # Changing image colorspace to grayscale
+    im_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+    # Dilating image
+    im_dilate = erode(im_gray, (3, 3))
+    #showImage(im_dilate)
+
+    # Inverting image
+    im_sample = (255-im_dilate)
+    #showImage(im_sample)
+
+    # Resizing image to 28x28
+    im_sample = resize_image_by_dim(im_sample, 28, 28)
+    #showImage(im_sample)
+
+    return im_sample
