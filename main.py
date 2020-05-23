@@ -80,14 +80,16 @@ expression_list = np.array(expression_list)
 ###################################################################
 
 ## EXPRESSION SOLVING ############################################
-# TODO: Colocar el resultado debajo del texto detectado
-im_result = resizeImage(working_im, 0.3)
-for exp in expression_list:
+im_result = working_im.copy()
+message_height_offset = 100
+for (exp, box) in zip(expression_list, boxes):
     str_exp, result = solve_expression(exp)
     print(str_exp, '=', result)
     # Show expression result on image
-    im_result = write_message_on_img(im_result, str(str_exp) + '=' + str(result))
-
+    x_pos = box[0]
+    y_pos = (box[3] + message_height_offset) if (box[3] + message_height_offset) < im_result.shape[0] else im_result.shape[0]
+    im_result = write_message_on_img(im_result, str(str_exp) + '=' + str(result), position=(x_pos, y_pos))
+im_result = resizeImage(im_result, 0.3)
 showImage(im_result)
 ##################################################################
 

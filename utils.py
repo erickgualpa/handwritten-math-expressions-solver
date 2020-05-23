@@ -45,14 +45,14 @@ def get_boxes_as_images(boxes, img): # 'boxes' item:(start_x, start_y, end_x, en
 
     return np.array(detected_texts)
 
-def write_message_on_img(img, message):
+def write_message_on_img(img, message,position):
     RED = (0, 255, 0)
     font = cv2.FONT_HERSHEY_SIMPLEX
-    font_size = 0.8
+    font_size = 4
     font_color = RED
-    font_thickness = 1
-    x,y = 10,40
-    img_text = cv2.putText(img, message, (x,y), font, font_size, font_color, font_thickness, cv2.LINE_AA)
+    font_thickness = 6
+
+    img_text = cv2.putText(img, message, position, font, font_size, font_color, font_thickness, cv2.LINE_AA)
 
     return img_text
 
