@@ -31,7 +31,7 @@ try:
     ###################################################################
     try:
         ## SET WORKING IMAGE ##############################################
-        im_index = 9
+        im_index = 4
         working_im = working_ims[im_index]
         working_im = resize_image_by_dim(working_im, WORKING_IM_WIDTH, WORKING_IM_HEIGHT)
         show_image(working_im)
@@ -60,7 +60,7 @@ try:
                 # Put image over a square canvas
                 im_gray = add_square_canvas_to_image(im_gray)
                 im_gray = add_borders_to_image(im_gray, border_scale=0.2, color=(0, 0, 0))
-                show_image(im_gray)
+                # show_image(im_gray)
 
                 # Resize image to (28,28)
                 im_gray = cv2.resize(im_gray, (28, 28), interpolation=cv2.INTER_AREA)
@@ -84,7 +84,7 @@ try:
         for (exp, box) in zip(expression_list, boxes):
             str_exp, result = solve_expression(exp)
             if len(result) > 0:
-                print(str_exp, '=', result)
+                print('Processed expression: ', str_exp, '=', result)
                 # Show expression result on image
                 x_pos = box[0]
                 y_pos = (box[3] + message_height_offset) if (box[3] + message_height_offset) < im_result.shape[0] else im_result.shape[0]

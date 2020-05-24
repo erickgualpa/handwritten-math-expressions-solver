@@ -101,7 +101,7 @@ def detect_text_on_image(img, min_confidence):
 
     # Re-scale the boxes and draw them over the original image
     offset_scale_x = 0.5  # increasing scale of x-dim of the bounding rectangle size
-    offset_scale_y = 0.6  # increasing scale of y-dim of the bounding rectangle size
+    offset_scale_y = 1.1  # increasing scale of y-dim of the bounding rectangle size
 
     original_height = np.array(original).shape[0]
     original_width = np.array(original).shape[1]
