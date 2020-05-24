@@ -7,7 +7,10 @@ from keras.models import load_model
 import os
 import json
 
+WORKING_IM_WIDTH = 1000
+WORKING_IM_HEIGHT = 1000
 DIGITS_SYMBOLS_MAPPING = "digits-symbols-mapping.json"
+
 # Load digits-symbols mapping from categorical to numerical
 with open(DIGITS_SYMBOLS_MAPPING, "r") as dig_sym_mapping_file:
     labels_mapping = json.load(dig_sym_mapping_file)["INV_DIGITS_SYMBOLS_MAPPING"]
@@ -28,9 +31,9 @@ try:
     ###################################################################
     try:
         ## SET WORKING IMAGE ##############################################
-        im_index = 0
+        im_index = 4
         working_im = working_ims[im_index]
-        working_im = resizeImage(working_im, 0.3)
+        working_im = resize_image_by_dim(working_im, WORKING_IM_WIDTH, WORKING_IM_HEIGHT)
         showImage(working_im)
         ###################################################################
 

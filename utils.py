@@ -50,9 +50,9 @@ def get_boxes_as_images(boxes, img): # 'boxes' item:(start_x, start_y, end_x, en
 def write_message_on_img(img, message, position):
     RED = (0, 255, 0)
     font = cv2.FONT_HERSHEY_SIMPLEX
-    font_size = 1
+    font_size = 3
     font_color = RED
-    font_thickness = 2
+    font_thickness = 4
 
     img_text = cv2.putText(img, message, position, font, font_size, font_color, font_thickness, cv2.LINE_AA)
 

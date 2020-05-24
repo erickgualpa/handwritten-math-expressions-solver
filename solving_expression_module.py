@@ -61,6 +61,7 @@ def solve_expression(math_exp):
             result = str_math_exp
     except:
         result = ""
+        print('Could not process the input espression: ', str_math_exp)
 
     return str_math_exp, str(result)
 
