@@ -5,7 +5,6 @@ from skimage.filters import threshold_sauvola
 import cv2
 import numpy as np
 
-## FUNCTIONS #################################################################
 def dilate(img, kernel_size):
     kernel = np.ones(kernel_size, np.uint8)
     im_dilation = cv2.dilate(img, kernel, iterations=3)
@@ -38,10 +37,18 @@ def max_contrast(img, scale):
 
     return contrast
 
+def max_brightness(img, scale):
+    img = Image.fromarray(img)
+    en = ImageEnhance.Brightness(img)
+    img = en.enhance(scale)
+    contrast = np.array(img)
+
+    return contrast
+
 def spot_numbers(img):
     # Smooth the image with contrast increasing
     im_contrast = max_contrast(img, 2)
-    #showImage(im_contrast)
+    #show_image(im_contrast)
 
     # Spot edges
     im_canny = cv2.Canny(im_contrast, 30, 200)
@@ -78,9 +85,8 @@ def find_and_draw_contours(original, img):
         detections.append((start_x, start_y, end_x, end_y))
 
     return np.array(detections), original
-##############################################################################
 
-def process_image(img):
+def process_image_detections(img):
     # STEP 1 - Convert input image to grayscale
     im_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
@@ -89,7 +95,7 @@ def process_image(img):
 
     # STEP 3 - Spot the digits
     im_digits = spot_numbers(im_bilateral)
-    # showImage(im_digits)
+    # show_image(im_digits)
 
     # STEP 4 - Find and draw the contours
     detections, im_contours = find_and_draw_contours(img, im_digits)
@@ -99,7 +105,7 @@ def process_image(img):
 def pre_classification_image_processing(img):
     # Smooth the image with contrast increasing
     im_contrast = max_contrast(img, 2)
-    # showImage(im_contrast)
+    # show_image(im_contrast)
 
     # Sauvola thresholding
     window_size = 25
@@ -120,14 +126,14 @@ def pre_cnn_image_processing(img):
 
     # Dilating image
     im_dilate = erode(im_gray, (3, 3))
-    #showImage(im_dilate)
+    #show_image(im_dilate)
 
     # Inverting image
     im_sample = (255-im_dilate)
-    #showImage(im_sample)
+    #show_image(im_sample)
 
     # Resizing image to 28x28
     im_sample = resize_image_by_dim(im_sample, 28, 28)
-    #showImage(im_sample)
+    #show_image(im_sample)
 
     return im_sample

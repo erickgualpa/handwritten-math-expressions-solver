@@ -22,7 +22,7 @@ def detect_text_on_image(img, min_confidence):
     # STEP 1: Resize image for making its dimensions 32 multiples
     height, width = img.shape[:2]
     img = cv2.resize(img, (NEW_WIDTH, NEW_HEIGHT))
-    #showImage(img)
+    #show_image(img)
 
     rW = width / float(NEW_WIDTH)   # Width change ratio
     rH = height / float(NEW_HEIGHT) # Height change ratio

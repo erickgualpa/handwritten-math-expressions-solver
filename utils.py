@@ -2,18 +2,18 @@ import cv2
 import numpy as np
 from TextBoxes import TextBoxes
 
-def loadImage(img_name):
+def load_image(img_name):
     img = cv2.imread(img_name, cv2.IMREAD_COLOR)
     return img
 
-def showImage(img):
+def show_image(img):
     if type(img) == str:
         img = cv2.imread(img, cv2.IMREAD_COLOR)
     cv2.imshow('image', img)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
-def resizeImage(img, scale):
+def resize_image(img, scale):
     width = int(img.shape[1] * scale)
     height = int(img.shape[0] * scale)
     dim = (width, height)
