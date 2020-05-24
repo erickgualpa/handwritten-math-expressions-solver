@@ -31,7 +31,7 @@ try:
     ###################################################################
     try:
         ## SET WORKING IMAGE ##############################################
-        im_index = 4
+        im_index = 8
         working_im = working_ims[im_index]
         working_im = resize_image_by_dim(working_im, WORKING_IM_WIDTH, WORKING_IM_HEIGHT)
         show_image(working_im)

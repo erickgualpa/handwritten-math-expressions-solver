@@ -1,5 +1,6 @@
 from imutils.object_detection import non_max_suppression
 from utils import *
+from TextBoxes import TextBoxes
 import numpy as np
 import cv2
 
@@ -121,12 +122,16 @@ def detect_text_on_image(img, min_confidence):
         end_y = (end_y + box_offset_y) if (end_y + box_offset_y) < original_height else original_height
 
         final_boxes.append((start_x, start_y, end_x, end_y))
-        cv2.rectangle(original, (start_x, start_y), (end_x, end_y), (0, 255, 0), 5)
 
     if len(final_boxes) > 1:
         # Sort 'boxes' by x-axis
         final_boxes = np.array(final_boxes)
         final_boxes = final_boxes[final_boxes[:, 0].argsort()]
+        tb = TextBoxes(final_boxes, min_dist_allowed=25)
+        final_boxes = tb.get_final_boxes()
+
+    for box in final_boxes:
+        cv2.rectangle(original, (box[0], box[1]), (box[2], box[3]), (0, 255, 0), 5)
 
     return final_boxes, original
 
