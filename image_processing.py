@@ -137,3 +137,8 @@ def pre_cnn_image_processing(img):
     #show_image(im_sample)
 
     return im_sample
+
+def process_text_boxes(boxes):
+    tb = TextBoxes(boxes, min_dist_allowed=100)
+    return tb.get_final_boxes()
+
