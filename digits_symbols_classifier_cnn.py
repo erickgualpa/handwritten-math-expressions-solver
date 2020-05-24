@@ -38,11 +38,11 @@ def build_digits_symbols_classifier(batch_size, epochs):
     model.add(Dropout(0.5))
     model.add(Dense(num_classes, activation='softmax'))
 
-    model.compile(loss=keras.losses.categorical_crossentropy,optimizer=keras.optimizers.Adadelta(),metrics=['accuracy'])
+    model.compile(loss=keras.losses.categorical_crossentropy, optimizer=keras.optimizers.Adadelta(), metrics=['accuracy'])
     ###################################################################
 
     # MODEL TRAINING ##################################################
-    hist = model.fit(x_train, y_train,batch_size=batch_size,epochs=epochs,verbose=1,validation_data=(x_test, y_test))
+    hist = model.fit(x_train, y_train, batch_size=batch_size, epochs=epochs, verbose=1, validation_data=(x_test, y_test))
     print('The model has successfully trained')
     ###################################################################
 
@@ -57,8 +57,10 @@ def build_digits_symbols_classifier(batch_size, epochs):
 if __name__ == '__main__':
     ## BUILD AND SAVE THE SYMBOLS/DIGITS CLASSIFIER ###################
     start_time = time.time()
-    digits_symbols_classifier = build_digits_symbols_classifier(batch_size=64, epochs=5)
-    digits_symbols_classifier.save('./classifiers/digits_symbols_cnn_classif.h5')
+    m_batch_size = 64
+    m_epochs = 5
+    digits_symbols_classifier = build_digits_symbols_classifier(batch_size=m_batch_size, epochs=m_epochs)
+    digits_symbols_classifier.save('./classifiers/digits_symbols_cnn_classif_' + str(m_batch_size) + '_' + str(m_epochs) + '.h5')
     print('Saving the model as digits_symbols_cnn_classif.h5')
     print("--- Elapsed time: %s seconds ---" % (time.time() - start_time))
     ###################################################################
