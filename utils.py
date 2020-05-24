@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+from TextBoxes import TextBoxes
 
 def loadImage(img_name):
     img = cv2.imread(img_name, cv2.IMREAD_COLOR)
@@ -31,9 +32,10 @@ def get_offset_for_all_directions(scale_x, scale_y, width, height):
 def get_boxes_as_images(boxes, img): # 'boxes' item:(start_x, start_y, end_x, end_y)
     detected_texts = []
 
-    # Sort 'boxes' by x-axis
-    boxes = np.array(boxes)
-    boxes = boxes[boxes[:, 0].argsort()]
+    if len(boxes) > 1:
+        # Sort 'boxes' by x-axis
+        boxes = np.array(boxes)
+        boxes = boxes[boxes[:, 0].argsort()]
 
     for box in boxes:   # box:(start_x, start_y, end_x, end_y)
         start_x = box[0]
@@ -45,12 +47,12 @@ def get_boxes_as_images(boxes, img): # 'boxes' item:(start_x, start_y, end_x, en
 
     return np.array(detected_texts)
 
-def write_message_on_img(img, message,position):
+def write_message_on_img(img, message, position):
     RED = (0, 255, 0)
     font = cv2.FONT_HERSHEY_SIMPLEX
-    font_size = 4
+    font_size = 1
     font_color = RED
-    font_thickness = 6
+    font_thickness = 2
 
     img_text = cv2.putText(img, message, position, font, font_size, font_color, font_thickness, cv2.LINE_AA)
 
@@ -61,3 +63,24 @@ def clean_factor_from_expression(factor):
         return factor[1:]
     else:
         return factor
+
+def add_square_canvas_to_image(img):
+    h, w = img.shape[:2]
+
+    if w > h:
+        canvas = np.zeros((w, w))
+        y_axis_start = (w-h)//2
+        canvas[y_axis_start:y_axis_start + h, :w] = img
+    else:
+        canvas = np.zeros((h, h))
+        x_axis_start = (h-w)//2
+        canvas[:h, x_axis_start:x_axis_start + w] = img
+
+    return canvas
+
+def add_borders_to_image(img, border_scale, color=(255, 255, 255)):
+    top = int(border_scale * img.shape[0])  # shape[0] = rows
+    bottom = top
+    left = int(border_scale * img.shape[1])  # shape[1] = cols
+    right = left
+    return cv2.copyMakeBorder(img, top, bottom, left, right, cv2.BORDER_CONSTANT, None, color)

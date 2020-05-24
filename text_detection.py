@@ -121,7 +121,12 @@ def detect_text_on_image(img, min_confidence):
         end_y = (end_y + box_offset_y) if (end_y + box_offset_y) < original_height else original_height
 
         final_boxes.append((start_x, start_y, end_x, end_y))
-        cv2.rectangle(original, (start_x, start_y), (end_x, end_y), (0, 255, 0), 2)
+        cv2.rectangle(original, (start_x, start_y), (end_x, end_y), (0, 255, 0), 5)
+
+    if len(final_boxes) > 1:
+        # Sort 'boxes' by x-axis
+        final_boxes = np.array(final_boxes)
+        final_boxes = final_boxes[final_boxes[:, 0].argsort()]
 
     return final_boxes, original
 

@@ -3,6 +3,7 @@ from text_detection import detect_text_on_image, get_boxes_as_images
 from solving_expression_module import solve_expression
 from keras.models import load_model
 
+
 import os
 import json
 
@@ -23,18 +24,19 @@ for root, dirs, files in os.walk(path_img):
 
 try:
     ## LOAD CLASSIFIER ################################################
-    clf = load_model('./classifiers/digits_symbols_cnn_classif_128_4.h5.h5')
+    clf = load_model('./classifiers/digits_symbols_cnn_classif_128_4.h5')
     ###################################################################
     try:
         ## SET WORKING IMAGE ##############################################
-        im_index = 2
+        im_index = 0
         working_im = working_ims[im_index]
-        showImage(resizeImage(working_im, 0.3))
+        working_im = resizeImage(working_im, 0.3)
+        showImage(working_im)
         ###################################################################
 
         ## TEXT DETECTION #################################################
         boxes, im_detection = detect_text_on_image(working_im, 0.8)    # (image, min_confidence)
-        # showImage(resizeImage(im_detection, 30))
+        showImage(im_detection)
         detected_texts = get_boxes_as_images(boxes, working_im)    # Extract de bounding rectangles of detected text as images
         ###################################################################
 
@@ -44,15 +46,18 @@ try:
         for im_text in detected_texts:
             detections, _ = process_image(im_text.copy())
             detected_digits_symbols = get_boxes_as_images(detections, im_text)
-            # showImage(resizeImage(im_contours, 30))
+            # showImage(im_contours)
             math_exp = []    # math_exp -> Symbol list
             for im_digit_symbol in detected_digits_symbols:
                 # Convert 'im_digit_symbol' to grayscale
                 im_gray = cv2.cvtColor(im_digit_symbol, cv2.COLOR_BGR2GRAY)
-                # showImage(resizeImage(im_gray, 30))
 
                 im_gray = pre_classification_image_processing(im_gray)
-                showImage(resizeImage(im_gray, 0.3))
+
+                # Put image over a square canvas
+                im_gray = add_square_canvas_to_image(im_gray)
+                im_gray = add_borders_to_image(im_gray, border_scale=0.2, color=(0, 0, 0))
+                showImage(im_gray)
 
                 # Resize image to (28,28)
                 im_gray = cv2.resize(im_gray, (28, 28), interpolation=cv2.INTER_AREA)
@@ -71,25 +76,32 @@ try:
 
         ## EXPRESSION SOLVING ############################################
         im_result = working_im.copy()
-        message_height_offset = 100
+        message_height_offset = 50
+
         for (exp, box) in zip(expression_list, boxes):
             str_exp, result = solve_expression(exp)
-            print(str_exp, '=', result)
-            # Show expression result on image
-            x_pos = box[0]
-            y_pos = (box[3] + message_height_offset) if (box[3] + message_height_offset) < im_result.shape[0] else im_result.shape[0]
-            im_result = write_message_on_img(im_result, str(str_exp) + '=' + str(result), position=(x_pos, y_pos))
-        showImage(resizeImage(im_result, 0.3))
+            if len(result) > 0:
+                print(str_exp, '=', result)
+                # Show expression result on image
+                x_pos = box[0]
+                y_pos = (box[3] + message_height_offset) if (box[3] + message_height_offset) < im_result.shape[0] else im_result.shape[0]
+                im_result = write_message_on_img(im_result, str(str_exp) + '=' + str(result), position=(x_pos, y_pos))
+        showImage(im_result)
         ##################################################################
 
         ## SAVE IMAGE RESULT #############################################
         im_res_filename = path_results_img + str(im_index) + '_result.jpg'
         cv2.imwrite(im_res_filename, im_result)
         ##################################################################
-    except IndexError:
-        print("[ERROR]: Working image not found")
-except OSError:
+
+    except Exception as e:
+        print('[ERROR]:', e)
+
+except OSError as ose:
     print('[ERROR]: Classifier filename not found')
+    print(ose)
+except Exception as e:
+    print('[ERROR]:', e)
 
 print("[INFO]: Finishing program...")
 
