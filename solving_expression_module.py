@@ -52,14 +52,18 @@ def solve_expression(math_exp):
     intersect_basic = np.intersect1d(math_exp, INTERNAL_OPERATIONS_SYMBOLS)
 
     str_math_exp = convert_expression_to_string(math_exp)
-    if len(intersect_complex) > 0:
-        result = solve_expression_on_wolfram_api(str_math_exp)
-    elif len(intersect_basic) > 0:
-        result = solve_expression_internally(str_math_exp)
-    else:
-        result = str_math_exp
+    try:
+        if len(intersect_complex) > 0:
+            result = solve_expression_on_wolfram_api(str_math_exp)
+        elif len(intersect_basic) > 0:
+            result = solve_expression_internally(str_math_exp)
+        else:
+            result = str_math_exp
+    except:
+        result = ""
+        print('Could not process the input espression: ', str_math_exp)
 
-    return str_math_exp, result
+    return str_math_exp, str(result)
 
 
 
