@@ -1,4 +1,4 @@
-from utils import loadImage
+from utils import load_image
 from image_processing import pre_cnn_image_processing
 import numpy as np
 import os
@@ -40,7 +40,7 @@ class DigitsSymbolsDataset:
                 # print("- ", label, " --> ", sample)
                 self.__add_target(labels_mapping[label])
                 filename = DATASET_PATH + label + "/" + sample
-                im_sample = pre_cnn_image_processing(loadImage(filename))
+                im_sample = pre_cnn_image_processing(load_image(filename))
                 self.__add_sample(im_sample)
 
         # Join images and targets in a single list for shuffling it

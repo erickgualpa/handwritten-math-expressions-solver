@@ -1,4 +1,5 @@
 import keras
+import time
 
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten
@@ -8,7 +9,7 @@ from DigitsSymbolsDataset import DigitsSymbolsDataset
 
 K.clear_session()
 
-def get_digits_symbols_classifier():
+def build_digits_symbols_classifier(batch_size, epochs):
     ## LOAD DATA ######################################################
     ds = DigitsSymbolsDataset()
     (x_train, y_train), (x_test, y_test) = ds.load_data()
@@ -26,9 +27,6 @@ def get_digits_symbols_classifier():
     ###################################################################
 
     # MODEL BUILDING ##################################################
-    batch_size = 128
-    epochs = 2
-
     # Model
     model = Sequential()
     model.add(Conv2D(32, kernel_size=(3, 3),activation='relu',input_shape=input_shape))
@@ -40,11 +38,11 @@ def get_digits_symbols_classifier():
     model.add(Dropout(0.5))
     model.add(Dense(num_classes, activation='softmax'))
 
-    model.compile(loss=keras.losses.categorical_crossentropy,optimizer=keras.optimizers.Adadelta(),metrics=['accuracy'])
+    model.compile(loss=keras.losses.categorical_crossentropy, optimizer=keras.optimizers.Adadelta(), metrics=['accuracy'])
     ###################################################################
 
     # MODEL TRAINING ##################################################
-    hist = model.fit(x_train, y_train,batch_size=batch_size,epochs=epochs,verbose=1,validation_data=(x_test, y_test))
+    hist = model.fit(x_train, y_train, batch_size=batch_size, epochs=epochs, verbose=1, validation_data=(x_test, y_test))
     print('The model has successfully trained')
     ###################################################################
 
@@ -55,3 +53,14 @@ def get_digits_symbols_classifier():
     ###################################################################
 
     return model
+
+if __name__ == '__main__':
+    ## BUILD AND SAVE THE SYMBOLS/DIGITS CLASSIFIER ###################
+    start_time = time.time()
+    m_batch_size = 64
+    m_epochs = 5
+    digits_symbols_classifier = build_digits_symbols_classifier(batch_size=m_batch_size, epochs=m_epochs)
+    digits_symbols_classifier.save('./classifiers/digits_symbols_cnn_classif_' + str(m_batch_size) + '_' + str(m_epochs) + '.h5')
+    print('Saving the model as digits_symbols_cnn_classif.h5')
+    print("--- Elapsed time: %s seconds ---" % (time.time() - start_time))
+    ###################################################################
