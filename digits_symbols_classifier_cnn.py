@@ -52,14 +52,18 @@ def build_digits_symbols_classifier(batch_size, epochs):
     print('Test accuracy:', score[1])
     ###################################################################
 
-    return model
+    # ACCURACY ########################################################
+    accuracy = score[1]
+    ###################################################################
+
+    return accuracy, model
 
 if __name__ == '__main__':
     ## BUILD AND SAVE THE SYMBOLS/DIGITS CLASSIFIER ###################
     start_time = time.time()
     m_batch_size = 64
     m_epochs = 5
-    digits_symbols_classifier = build_digits_symbols_classifier(batch_size=m_batch_size, epochs=m_epochs)
+    accuracy, digits_symbols_classifier = build_digits_symbols_classifier(batch_size=m_batch_size, epochs=m_epochs)
     digits_symbols_classifier.save('./classifiers/digits_symbols_cnn_classif_' + str(m_batch_size) + '_' + str(m_epochs) + '.h5')
     print('Saving the model as digits_symbols_cnn_classif.h5')
     print("--- Elapsed time: %s seconds ---" % (time.time() - start_time))

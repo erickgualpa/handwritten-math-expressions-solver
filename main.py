@@ -31,7 +31,7 @@ try:
     ###################################################################
     try:
         ## SET WORKING IMAGE ##############################################
-        im_index = 8
+        im_index = 3
         working_im = working_ims[im_index]
         working_im = resize_image_by_dim(working_im, WORKING_IM_WIDTH, WORKING_IM_HEIGHT)
         show_image(working_im)
@@ -47,7 +47,7 @@ try:
         expression_list = []
         expression = []
         for im_text in detected_texts:
-            detections, _ = process_image_detections(im_text.copy())
+            detections, im_contours = process_image_detections(im_text.copy())
             detected_digits_symbols = get_boxes_as_images(detections, im_text)
             # show_image(im_contours)
             math_exp = []    # math_exp -> Symbol list
