@@ -21,6 +21,7 @@ class TextBoxes:
         ## Neighbor points #################################################
         neighbor_top_left = (neighbor[0][0], neighbor[0][1])
         neighbor_bottom_left = (neighbor[2][0], neighbor[2][1])
+        neighbor_middle_left = [neighbor[2][0], neighbor[0][1] + int(neighbor[2][1] - neighbor[0][1])//2]
         ####################################################################
 
         ## Main box vertices ###############################################
@@ -34,7 +35,7 @@ class TextBoxes:
         boundingBox = mplPath.Path(np.array([box_top_left, box_top_right,box_bottom_left, box_bottom_right]))
         ####################################################################
 
-        if boundingBox.contains_point(neighbor_top_left) or boundingBox.contains_point(neighbor_bottom_left):
+        if boundingBox.contains_point(neighbor_top_left) or boundingBox.contains_point(neighbor_bottom_left) or boundingBox.contains_point(neighbor_middle_left):
             overlapping = True
         return overlapping
 

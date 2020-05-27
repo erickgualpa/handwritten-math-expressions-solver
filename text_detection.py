@@ -127,7 +127,7 @@ def detect_text_on_image(img, min_confidence):
         # Sort 'boxes' by x-axis
         final_boxes = np.array(final_boxes)
         final_boxes = final_boxes[final_boxes[:, 0].argsort()]
-        tb = TextBoxes(final_boxes, min_dist_allowed=25)
+        tb = TextBoxes(final_boxes, min_dist_allowed=125)
         final_boxes = tb.get_final_boxes()
 
     for box in final_boxes:
