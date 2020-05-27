@@ -6,7 +6,7 @@ from os import listdir
 import json
 
 DIGITS_SYMBOLS_MAPPING = "digits-symbols-mapping.json"
-DATASET_PATH = "../Kaggle_reducted_dataset/"
+DATASET_PATH = "../Kaggle/Kaggle_reducted_dataset/"
 WIDTH_DS_ITEM = 28   # Dataset sample width
 HEIGHT_DS_ITEM = 28  # Dataset sample height
 

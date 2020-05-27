@@ -1,0 +1,3 @@
+-- CNN TRAINING REPORT for the params: batch_size=128, epochs=2
+- Accuracy: 0.9837874174118042
+- Elapsed time: 281.61136412620544
