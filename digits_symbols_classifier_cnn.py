@@ -1,5 +1,6 @@
 import keras
 import time
+import sys
 
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten
@@ -59,12 +60,22 @@ def build_digits_symbols_classifier(batch_size, epochs):
     return accuracy, model
 
 if __name__ == '__main__':
-    ## BUILD AND SAVE THE SYMBOLS/DIGITS CLASSIFIER ###################
-    start_time = time.time()
-    m_batch_size = 64
-    m_epochs = 5
-    accuracy, digits_symbols_classifier = build_digits_symbols_classifier(batch_size=m_batch_size, epochs=m_epochs)
-    digits_symbols_classifier.save('./classifiers/digits_symbols_cnn_classif_' + str(m_batch_size) + '_' + str(m_epochs) + '.h5')
-    print('Saving the model as digits_symbols_cnn_classif.h5')
-    print("--- Elapsed time: %s seconds ---" % (time.time() - start_time))
-    ###################################################################
+    ##  PARSING COMMAND LINE ARGUMENTS FOR GETTING 'batch size' AND 'number of epochs' #####
+    try:
+        m_batch_size = int(sys.argv[1])
+        m_epochs = int(sys.argv[2])
+    except Exception:
+        print("[ERROR]: Needed arguments wasn't set")
+    ########################################################################################
+    ## BUILD AND SAVE THE SYMBOLS/DIGITS CLASSIFIER ########################################
+    try:
+        start_time = time.time()
+        accuracy, digits_symbols_classifier = build_digits_symbols_classifier(batch_size=m_batch_size, epochs=m_epochs)
+        digits_symbols_classifier.save('./classifiers/digits_symbols_cnn_classif_' + str(m_batch_size) + '_' + str(m_epochs) + '.h5')
+        print('Saving the model as digits_symbols_cnn_classif.h5')
+        print("--- Elapsed time: %s seconds ---" % (time.time() - start_time))
+    except Exception as e:
+        print('[ERROR]:', e)
+    #########################################################################################
+
+    print("[INFO]: Finishing program...")

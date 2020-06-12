@@ -3,8 +3,7 @@ from text_detection import detect_text_on_image, get_boxes_as_images
 from solving_expression_module import solve_expression
 from keras.models import load_model
 
-
-import os
+import sys
 import json
 
 WORKING_IM_WIDTH = 1000
@@ -15,14 +14,15 @@ DIGITS_SYMBOLS_MAPPING = "digits-symbols-mapping.json"
 with open(DIGITS_SYMBOLS_MAPPING, "r") as dig_sym_mapping_file:
     labels_mapping = json.load(dig_sym_mapping_file)["INV_DIGITS_SYMBOLS_MAPPING"]
 
-## LOAD IMAGES FOR TESTING ########################################
-path_img = './testing_imgs/'
-path_results_img = './testing_imgs_results/'
+## PARSING COMMAND LINE ARGUMENTS FOR GETTING THE INPUT IMAGE #####
+path_results_img = './testing_imgs_results/'   # The path where the results images will be saved
+input_filename = ''
+try:
+    input_filename = sys.argv[1]
+except Exception:
+    print("[ERROR]: Input image wasn't set")
 
-working_ims = []
-for root, dirs, files in os.walk(path_img):
-    for filename in files:
-        working_ims.append(load_image(path_img + filename))
+working_im = load_image(input_filename)
 ###################################################################
 
 try:
@@ -30,16 +30,14 @@ try:
     clf = load_model('./classifiers/digits_symbols_cnn_classif_128_4.h5')
     ###################################################################
     try:
-        ## SET WORKING IMAGE ##############################################
-        im_index = 3
-        working_im = working_ims[im_index]
+        ## PREPARE WORKING IMAGE ##########################################
         working_im = resize_image_by_dim(working_im, WORKING_IM_WIDTH, WORKING_IM_HEIGHT)
         show_image(working_im)
         ###################################################################
 
         ## TEXT DETECTION #################################################
         boxes, im_detection = detect_text_on_image(working_im, 0.8)    # (image, min_confidence)
-        show_image(im_detection)
+        # show_image(im_detection)
         detected_texts = get_boxes_as_images(boxes, working_im)    # Extract de bounding rectangles of detected text as images
         ###################################################################
 
@@ -93,7 +91,7 @@ try:
         ##################################################################
 
         ## SAVE IMAGE RESULT #############################################
-        im_res_filename = path_results_img + str(im_index) + '_result.jpg'
+        im_res_filename = path_results_img + 'last_result.jpg'
         cv2.imwrite(im_res_filename, im_result)
         ##################################################################
 
