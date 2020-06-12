@@ -19,7 +19,7 @@ This will begin the image processing and in case it has some expression, a new i
 
 The second thing we can do with this is try to add new mathematical symbols to the classifier and train it. The current version only
 supports the basic operations such as *addition, substraction, multiplication and division* (all of them being able to include 
-*parenthesis* and *claudators*)
+*parenthesis* and *claudators*).
 
 ## Adding new symbols and training the classifier
 The dataset used to train the classifier is a reducted version of this one: [Handwritten math symbols dataset](https://www.kaggle.com/xainano/handwrittenmathsymbols/data)
@@ -35,4 +35,4 @@ To start the training you may run the **digits_symbols_classifier_cnn.py** setti
 erickgualpa@erickgm:~$ python digits_symbols_classifier_cnn 64 5
 ```
 
-This will load the dataset, build the classifier using the mapped set previously and save the classifier in the **classifiers/** directory
+This will load the dataset, build the classifier using the mapped set previously and save the classifier in the **classifiers/** directory.
