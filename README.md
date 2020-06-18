@@ -1,6 +1,6 @@
 # Handwritten math expressions solver
-This is a *Computer Vision* project I made, for trying to test myself in the use of **Convolutional Neural Networks** in a Python project.
-Just as the title says, this project builds a module able to solve basic mathematical expressions inside an input image. 
+This is a *Computer Vision* project I made, for trying to check the use of **Convolutional Neural Networks** in a Python project.
+Just as the title says, this project builds a module able to solve basic mathematical expressions included by an input image. 
 
 <p align="center">
   <img src="testing_imgs/h.jpg" height="350">
@@ -8,13 +8,13 @@ Just as the title says, this project builds a module able to solve basic mathema
 </p>
 
 ## What can we do with this module?
-The program operation is so simple, just run the **main.py** file with setting the input image as an argument on the command line:
+The program operation is very simple, just run the **main.py** file setting the input image as an argument on the command line:
 
 ```console
 erickgualpa@erickgm:~$ python main.py ./testing_imgs/c.jpg
 ```
 
-This will begin the image processing and in case it has some expression, a new image will be saved in the 
+This will begin image processing and in case it has some expression, a new image will be saved in the 
 **testing_imgs_results/** directory including the expression detected and the result. 
 
 The second thing we can do with this is try to add new mathematical symbols to the classifier and train it. The current version only
