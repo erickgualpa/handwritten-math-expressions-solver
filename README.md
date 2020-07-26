@@ -1,5 +1,5 @@
 # Handwritten math expressions solver :heavy_plus_sign: :heavy_minus_sign: :heavy_multiplication_x: :heavy_division_sign:
-This is a *Computer Vision* project I made, for trying to check the use of **Convolutional Neural Networks** in a Python project.
+This is a *Computer Vision* project I made trying to check the use of **Convolutional Neural Networks** in a Python project.
 Just as the title says, this project builds a module able to solve basic mathematical expressions included by an input image. 
 
 <p align="center">
@@ -8,7 +8,7 @@ Just as the title says, this project builds a module able to solve basic mathema
 </p>
 
 ## What can we do with this module? :point_up:
-The program operation is very simple, just run the **main.py** file setting the input image as an argument on the command line:
+The program operation is simple, just run the **main.py** file setting the input image as an argument on the command line:
 
 ```console
 erickgualpa@erickgm:~$ python main.py ./testing_imgs/c.jpg
