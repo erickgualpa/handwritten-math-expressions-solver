@@ -7,7 +7,7 @@ Just as the title says, this project builds a module able to solve basic mathema
   <img src="testing_imgs_results/7_result.jpg" height="350">
 </p>
 
-## What can we do with this module? :point_up:
+## :small_blue_diamond: What can we do with this module? 
 The program operation is simple, just run the **main.py** file setting the input image as an argument on the command line:
 
 ```console
@@ -21,7 +21,7 @@ The second thing we can do with this is try to add new mathematical symbols to t
 supports the basic operations such as *addition, substraction, multiplication and division* (all of them being able to include 
 *parenthesis* and *claudators*).
 
-## Adding new symbols and training the classifier :ballot_box_with_check:
+## :small_blue_diamond: Adding new symbols and training the classifier
 The dataset used to train the classifier is a reducted version of this one: [Handwritten math symbols dataset](https://www.kaggle.com/xainano/handwrittenmathsymbols/data)
 
 The files assigned to the Classifier training ara **digits_symbols_classifier_cnn.py** and **DigitsSymbolsDataset.py**. The second one is the file you may edit if you want to add a different dataset. 
