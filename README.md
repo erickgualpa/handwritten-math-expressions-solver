@@ -1,6 +1,6 @@
 # Handwritten math expressions solver :heavy_plus_sign: :heavy_minus_sign: :heavy_multiplication_x: :heavy_division_sign:
 
-### **[WARNING:exclamation::exclamation::exclamation: A refactor over the code is pendant in order to ease the understanting of it. Also, the repository will be split in 2: one for the application using the trained model and a second for the training framework]** 
+### **[WARNING:exclamation::exclamation::exclamation: A refactor over the code is pendant in order to ease the understanding of it. Also, the repository will be split in 2: one for the application using the trained model and a second one for the training framework]** 
 
 This is a *Computer Vision* project I made trying to check the use of **Convolutional Neural Networks** in a Python project.
 Just as the title says, this project builds a module able to solve basic mathematical expressions included by an input image. 
